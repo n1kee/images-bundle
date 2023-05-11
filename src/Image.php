@@ -1,27 +1,8 @@
 <?php
 
 namespace FilesBundle;
-use Symfony\Component\DependencyInjection\Container;
+
 use Imagick;
-use SplFileObject;
-
-class File {
-
-    private $file;
-    
-    function __construct(string $filePath)
-    {
-        $this->file = new SplFileObject($filePath);
-    }
-
-    function save($path) {
-
-    }
-
-    function get() {
-        return $this->file;
-    }
-}
 
 class Image extends File {
 
@@ -73,8 +54,7 @@ class Image extends File {
         );
     }
 
-    function save($filePath) {
-        $fileName = $this->file->getImageSignature();
-        $this->file->writeImage("{$filePath}/{$fileName}");
+    function save(string $imgPath) {
+        $this->file->writeImage($imgPath);
     }
 }
