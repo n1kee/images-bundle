@@ -1,15 +1,15 @@
 <?php
 
-namespace FilesBundle\DependencyInjection;
+namespace ImagesExtension\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
-class FilesExtension extends Extension
+class ImagesExtension extends Extension
 {
     public function load(array $configs, ContainerBuilder $containerBuilder)
-    {var_dump('We\'re alive!');die;
+    {
         $loader = new YamlFileLoader(
             $containerBuilder,
             new FileLocator(__DIR__.'/../../config')

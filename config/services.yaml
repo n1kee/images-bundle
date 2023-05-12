@@ -14,20 +14,10 @@ services:
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
-    FilesBundle\:
+    Color2NameBundle\:
         resource: '../src/'
         exclude:
             - '../src/DependencyInjection/'
-
-    FilesBundle\File:
-       class: FilesBundle\File
-       arguments:
-           - "@service_container"
-
-    FilesBundle\Image:
-       class: FilesBundle\Image
-       arguments:
-           - "@service_container"
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
