@@ -5,8 +5,13 @@ use ImagesBundle\Api\Interface\ImagesApiInterface;
 use ImagesBundle\Api\TheColorApi;
 
 class TheColorAdapter implements ImagesApiInterface {
-	static function getColorName($colorHex): string {
-		$response = TheColorApi::getColorInfo($colorHex);
+	function __construct(
+		protected TheColorApi $theColorApi
+	) {
+	}
+
+	function getColorName($colorHex): string {
+		$response = $this->theColorApi->getColorInfo($colorHex);
 		return $response ? $response["colors"][0]["name"]: "";
 	}
 }

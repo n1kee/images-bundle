@@ -15,35 +15,42 @@ use FilesBundle\Image;
 
 class Images {
 
-    static protected function getApi() {
-        return new class {
-            protected $apiAdapters = [
-                TheColorAdapter::class,
-                ColorPizzaAdapter::class,
-                ImagesApi::class,
-            ];
+    function __construct(
+        protected TheColorAdapter $theColorAdapter,
+        protected ColorPizzaAdapter $colorPizzaAdapter,
+        protected ImagesApi $imagesApi,
+    ) {
+        $apiLoader = new class {
+            function __construct(...$adapters) {
+                $this->apiAdapters = $adapters;
+            }
 
             function __call(string $methodName, $params)
             {   
                 $result = null;
 
                 foreach ($this->apiAdapters as $adapter) {
-                    $result = $adapter::{$methodName}(...$params);
+                    $result = $adapter->{$methodName}(...$params);
                     return $result;
                 }
             }
         };
+        $this->api = new $apiLoader(
+            $this->theColorAdapter,
+            $this->colorPizzaAdapter,
+            $this->imagesApi,
+        );
     }
 
-    static function matchImageColor(Image $img, array $matchColors) {
+    function matchImageColor(Image $img, array $matchColors) {
 
-        $topColors = self::getMostUsedColors($img, 10);
+        $topColors = $this->getMostUsedColors($img, 10);
 
         foreach($topColors as $color => $count) {
 
             $colorHex = Color::fromIntToHex($color);
 
-            $colorName = self::getColorName($colorHex);
+            $colorName = $this->getColorName($colorHex);
 
             foreach ($matchColors as $matchColor) {
                 var_dump($colorName . " / " . $matchColor);
@@ -56,11 +63,11 @@ class Images {
         return null;
     }
 
-    static function getColorName($colorHex) {
-        return self::getApi()->getColorName($colorHex);
+    function getColorName($colorHex) {
+        return $this->api->getColorName($colorHex);
     }
 
-    static function getMostUsedColors(Image $img, int $number = 1) {
+    function getMostUsedColors(Image $img, int $number = 1) {
 
         # Needs ext-gd extension
         $palette = Palette::fromContents($img->__toString());

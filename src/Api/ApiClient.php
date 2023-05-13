@@ -6,32 +6,32 @@ use Symfony\Component\HttpClient\HttpClient;
 
 class ApiClient {
 
-	protected static string $url = "";
+	protected string $url = "";
 
-	static function get(string $path, $params) {
-		return self::makeRequest($path, "GET", $params);
+	function get(string $path, $params) {
+		return $this->makeRequest($path, "GET", $params);
 	}
 
-	static function post(string $path, $params) {
-		return self::makeRequest($path, "POST", $params);
+	function post(string $path, $params) {
+		return $this->makeRequest($path, "POST", $params);
 	}
 
-	static function update(string $path, $params) {
-		return self::makeRequest($path, "UPDATE", $params);
+	function update(string $path, $params) {
+		return $this->makeRequest($path, "UPDATE", $params);
 	}
 
-	static function delete(string $path, $params) {
-		return self::makeRequest($path, "DELETE", $params);
+	function delete(string $path, $params) {
+		return $this->makeRequest($path, "DELETE", $params);
 	}
 
-	static function getUrl(): string {
-		return static::$url;
+	function getUrl(): string {
+		return $this->url;
 	}
 
-	protected static function makeRequest(string $path, string $method, $params) {
+	protected function makeRequest(string $path, string $method, $params) {
 		$path = $path ?? "";
 		$method = $method ?? "GET";
-		$fullUrl = static::$url . $path;
+		$fullUrl = $this->url . $path;
         $response = HttpClient::create()
         	->request($method, $fullUrl, $params);
 

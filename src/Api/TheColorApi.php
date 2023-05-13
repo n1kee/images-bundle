@@ -6,14 +6,14 @@ use ImagesBundle\Api\ApiClient;
 
 class TheColorApi extends ApiClient {
 
-	protected static string $url = "https://www.thecolorapi.com/id";
+	protected string $url = "https://www.thecolorapi.com/id";
 
-	static public function getColorInfo(string | array $colorHex) {
+	public function getColorInfo(string | array $colorHex) {
 		if (is_array($colorHex)) {
 			$colorHex = implode(",", $colorHex);
 		}
 		$colorHex = str_replace("#", "", $colorHex);
-		$result = self::get("", [
+		$result = $this->get("", [
 			"query" => [
 		        "hex" => $colorHex,
 		    ]
