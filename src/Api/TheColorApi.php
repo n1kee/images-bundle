@@ -4,20 +4,22 @@ namespace ImagesBundle\Api;
 
 use ImagesBundle\Api\ApiClient;
 
-class ColorPizzaApi extends ApiClient {
+class TheColorApi extends ApiClient {
 
-	protected static string $url = "https://api.color.pizza/v1/";
+	protected static string $url = "https://www.thecolorapi.com/id";
 
 	static public function getColorInfo(string | array $colorHex) {
 		if (is_array($colorHex)) {
 			$colorHex = implode(",", $colorHex);
 		}
 		$colorHex = str_replace("#", "", $colorHex);
-		return self::get("", [
+		$result = self::get("", [
 			"query" => [
-		        "values" => $colorHex,
-		        "list" => "bestOf",
+		        "hex" => $colorHex,
 		    ]
 		]);
+		var_dump("%%%%%%%{$colorHex}%%%%");
+		var_dump($result ? $result["name"]["value"] : null);
+		return $result;
 	}
 }

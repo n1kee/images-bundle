@@ -5,6 +5,7 @@ namespace ImagesBundle;
 use League\ColorExtractor\Color;
 use League\ColorExtractor\Palette;
 
+use ImagesBundle\Api\Adapter\TheColorAdapter;
 use ImagesBundle\Api\Adapter\ColorPizzaAdapter;
 use ImagesBundle\Api\ImagesApi;
 
@@ -17,6 +18,7 @@ class Images {
     static protected function getApi() {
         return new class {
             protected $apiAdapters = [
+                TheColorAdapter::class,
                 ColorPizzaAdapter::class,
                 ImagesApi::class,
             ];
@@ -26,11 +28,7 @@ class Images {
                 $result = null;
 
                 foreach ($this->apiAdapters as $adapter) {
-                    try {
-                        $result = $adapter::{$methodName}(...$params);
-                    } catch(\Exception $ex) {
-                        continue;
-                    }
+                    $result = $adapter::{$methodName}(...$params);
                     return $result;
                 }
             }
@@ -48,6 +46,8 @@ class Images {
             $colorName = self::getColorName($colorHex);
 
             foreach ($matchColors as $matchColor) {
+                var_dump($colorName . " / " . $matchColor);
+                var_dump("==================================");
                 if (stripos($colorName, $matchColor) !== false) {
                     return $matchColor;
                 }
@@ -61,7 +61,6 @@ class Images {
     }
 
     static function getMostUsedColors(Image $img, int $number = 1) {
-        $averageColorImg = new Image($img->clone());
 
         # Needs ext-gd extension
         $palette = Palette::fromContents($img->__toString());

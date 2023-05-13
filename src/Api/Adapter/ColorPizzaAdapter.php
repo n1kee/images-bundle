@@ -6,7 +6,7 @@ use ImagesBundle\Api\ColorPizzaApi;
 
 class ColorPizzaAdapter implements ImagesApiInterface {
 	static function getColorName($colorHex): string {
-		$response = ColorPizzaApi::getColorName($colorHex);
-		return $response ?? $response["colors"][0]["name"];
+		$response = ColorPizzaApi::getColorInfo($colorHex);
+		return $response ? $result["name"]["value"]: "";
 	}
 }

@@ -2,8 +2,7 @@
 
 namespace ImagesBundle\Api;
 
-use Symfony\Contracts\HttpClient\HttpClientInterface;
-use Symfony\Contracts\HttpClient\HttpClient;
+use Symfony\Component\HttpClient\HttpClient;
 
 class ApiClient {
 
@@ -26,14 +25,15 @@ class ApiClient {
 	}
 
 	static function getUrl(): string {
-		return self::$url;
+		return static::$url;
 	}
 
 	protected static function makeRequest(string $path, string $method, $params) {
 		$path = $path ?? "";
 		$method = $method ?? "GET";
-		$fullUrl = self::$url . $path . substr($colorHex, 1);
-        $response = (new HttpClient)->request($method, $fullUrl);
+		$fullUrl = static::$url . $path;
+        $response = HttpClient::create()
+        	->request($method, $fullUrl, $params);
 
         $statusCode = $response->getStatusCode();
 
