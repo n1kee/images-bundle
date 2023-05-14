@@ -110,4 +110,51 @@ class Images {
 
         return $palette->getMostUsedColors($number);
     }
+
+
+    function guessColorName($rgb)
+    {
+        $colors = [
+            "Blue" => 0x0000FF,
+            "Red" => 0xFF0000,
+            "Green" => 0x00FF00,
+            "Black" => 0x000000,
+            "White" => 0xFFFFFF,
+            "Yellow" => 0xFFFF00,
+            "Gray" => 0x808080,
+            "Purple" => 0x8000FF,
+            "Orange" => 0xFF8000,
+        ];
+
+        $largestDiff = 0;
+        $closestColor = "";
+        foreach ($colors as $name => $rgbColor) {
+
+            $colorDiff = $this->getColorDiff($rgbColor,$rgb);
+            if ($colorDiff > $largestDiff) {
+                $largestDiff = $colorDiff;
+                $closestColor = $name;
+            }
+
+        }
+        return $closestColor;
+
+    }
+
+    function getColorDiff($rgb1,$rgb2)
+    {
+        // do the math on each tuple
+        // could use bitwise operates more efficiently but just do strings for now.
+        $red1   = hexdec(substr($rgb1,0,2));
+        $green1 = hexdec(substr($rgb1,2,2));
+        $blue1  = hexdec(substr($rgb1,4,2));
+
+        $red2   = hexdec(substr($rgb2,0,2));
+        $green2 = hexdec(substr($rgb2,2,2));
+        $blue2  = hexdec(substr($rgb2,4,2));
+
+        return pow(($red2 - $red1) * .299, 2) + 
+            pow(($green2 - $green1) * .587, 2) + 
+            pow(($blue2 - $blue1) * .114, 2);
+    }
 }
