@@ -26,8 +26,8 @@ class Images {
         protected RequestHeadersStorage $requestHeadersStorage,
     ) {
         $this->apiLoader->setApiAdapters(
-            $theColorAdapter,
             $colorPizzaAdapter,
+            $theColorAdapter,
             $imagesApi,
         );
     }
