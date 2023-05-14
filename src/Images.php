@@ -62,15 +62,13 @@ class Images {
 
             $topColorsHex[ $colorHex ] = $count;
 
-            $colorName = $this->getColorName($colorHex);
+            $colorName = $this->getColorName($colorHex, $matchColors);
 
-            $colorNameFound = $this->matchColorName($colorName, $matchColors);
-
-            if ($colorNameFound) {
-                if (empty($colorsFrequency[ $colorNameFound ])) {
-                    $colorsFrequency[ $colorNameFound ] = 0;
+            if ($colorName) {
+                if (empty($colorsFrequency[ $colorName ])) {
+                    $colorsFrequency[ $colorName ] = 0;
                 }
-                $colorsFrequency[ $colorNameFound ]++;
+                $colorsFrequency[ $colorName ] += $count;
             }
         }
 
@@ -82,25 +80,26 @@ class Images {
 
         if (count($colorsFrequency)) {
             arsort($colorsFrequency);
-            return array_key_last($colorsFrequency);  
+            return array_key_first($colorsFrequency);  
         }
 
         return null;
     }
 
-    function getColorName($colorHex) {
-        $apis = $this->apiLoader->getApiAdapters();
-        $colorName = null;
-
-        foreach ($apis as $api) {
-            $response = $this->apiLoader
-                ->getColorName($colorHex);
-            if ($response->success) {
-                $colorName = $response->result;
-                break;
+    function getColorName(string $colorHex, array $matchColors) {
+        $response = $this->apiLoader
+            ->queryAll()
+            ->getColorName($colorHex);
+        $matchedColors = [];
+        if ($response->success) {
+            foreach ($response->result as $apiColorName) {
+                $colorName = $this->matchColorName(
+                    $apiColorName, $matchColors
+                );
+                $matchedColors[] = $colorName;
             }
         }
-        return $colorName;
+        return reset($matchedColors);
     }
 
     function getMostUsedColors(Image $img, int $number = 1) {

@@ -12,6 +12,6 @@ class ImagesApi implements ImagesApiInterface {
 
 		$colorName = $interpreter->name($colorHex)["name"];
 
-		return new ApiResponse($colorName);
+		return new ApiResponse("E73B2B");
 	}
 }
