@@ -62,7 +62,7 @@ class Images {
 
             $topColorsHex[ $colorHex ] = $count;
 
-            $colorName = $this->getColorName($colorHex, $matchColors);
+            $colorName = $this->matchColorName($colorHex, $matchColors);
 
             if ($colorName) {
                 if (empty($colorsFrequency[ $colorName ])) {
@@ -86,7 +86,7 @@ class Images {
         return null;
     }
 
-    function getColorName(string $colorHex, array $matchColors) {
+    function matchColorName(string $colorHex, array $matchColors) {
         $response = $this->apiLoader
             ->queryAll()
             ->getColorName($colorHex);
