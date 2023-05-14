@@ -30,6 +30,23 @@ class Images {
         );
     }
 
+    function matchColorName(string $colorName, array $matchColors) {
+        $colorNameMatches = [];
+
+        foreach ($matchColors as $matchColor) {
+            $matchPosition = stripos($colorName, $matchColor);
+            if ($matchPosition !== false) {
+                $colorNameMatches[ $matchPosition ] = $matchColor;
+            }
+        }
+
+        if (count($colorNameMatches)) {
+            ksort($colorNameMatches);
+            return end($colorNameMatches);
+        }
+
+        return null;
+    }
 
     function matchImageColor(Image $img, array $matchColors) {
 
@@ -47,18 +64,9 @@ class Images {
 
             $colorName = $this->getColorName($colorHex);
 
-            $colorNameMatches = [];
+            $colorNameFound = $this->matchColorName($colorName, $matchColors);
 
-            foreach ($matchColors as $matchColor) {
-                $matchPosition = stripos($colorName, $matchColor);
-                if ($matchPosition !== false) {
-                    $colorNameMatches[ $matchPosition ] = $matchColor;
-                }
-            }
-
-            if (count($colorNameMatches)) {
-                ksort($colorNameMatches);
-                $colorNameFound = end($colorNameMatches);
+            if ($colorNameFound) {
                 if (empty($colorsFrequency[ $colorNameFound ])) {
                     $colorsFrequency[ $colorNameFound ] = 0;
                 }
@@ -81,7 +89,18 @@ class Images {
     }
 
     function getColorName($colorHex) {
-        return $this->apiLoader->getColorName($colorHex);
+        $apis = $this->apiLoader->getApiAdapters();
+        $colorName = null;
+
+        foreach ($apis as $api) {
+            $response = $this->apiLoader
+                ->getColorName($colorHex);
+            if ($response->success) {
+                $colorName = $response->result;
+                break;
+            }
+        }
+        return $colorName;
     }
 
     function getMostUsedColors(Image $img, int $number = 1) {

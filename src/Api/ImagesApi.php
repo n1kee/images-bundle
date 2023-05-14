@@ -4,11 +4,14 @@ namespace ImagesBundle\Api;
 
 use ourcodeworld\NameThatColor\ColorInterpreter;
 use ImagesBundle\Api\Interface\ImagesApiInterface;
+use ImagesBundle\Api\ApiResponse;
 
 class ImagesApi implements ImagesApiInterface {
-	function getColorName(string $colorHex): string {
+	function getColorName(string $colorHex): ApiResponse {
 		$interpreter = new ColorInterpreter;
 
-		return $interpreter->name($colorHex)["name"];
+		$colorName = $interpreter->name($colorHex)["name"];
+
+		return new ApiResponse($colorName);
 	}
 }
