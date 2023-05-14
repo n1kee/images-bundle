@@ -12,6 +12,6 @@ class TheColorAdapter implements ImagesApiInterface {
 
 	function getColorName($colorHex): string {
 		$response = $this->theColorApi->getColorInfo($colorHex);
-		return $response ? $response["colors"][0]["name"]: "";
+		return $response ? $response["name"]["value"]: "";
 	}
 }

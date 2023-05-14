@@ -12,6 +12,6 @@ class ColorPizzaAdapter implements ImagesApiInterface {
 
 	function getColorName($colorHex): string {
 		$response = $this->colorPizzaApi->getColorInfo($colorHex);
-		return $response ? $result["name"]["value"]: "";
+		return $response ? $response["colors"][0]["name"]: "";
 	}
 }

@@ -18,8 +18,6 @@ class TheColorApi extends ApiClient {
 		        "hex" => $colorHex,
 		    ]
 		]);
-		var_dump("%%%%%%%{$colorHex}%%%%");
-		var_dump($result ? $result["name"]["value"] : null);
 		return $result;
 	}
 }

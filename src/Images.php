@@ -8,8 +8,11 @@ use League\ColorExtractor\Palette;
 use ImagesBundle\Api\Adapter\TheColorAdapter;
 use ImagesBundle\Api\Adapter\ColorPizzaAdapter;
 use ImagesBundle\Api\ImagesApi;
+use ImagesBundle\Api\ApiLoader;
 
 use ourcodeworld\NameThatColor\ColorInterpreter;
+
+use App\Storage\RequestHeadersStorage;
 
 use FilesBundle\Image;
 
@@ -19,28 +22,16 @@ class Images {
         protected TheColorAdapter $theColorAdapter,
         protected ColorPizzaAdapter $colorPizzaAdapter,
         protected ImagesApi $imagesApi,
+        protected ApiLoader $apiLoader,
+        protected RequestHeadersStorage $requestHeadersStorage,
     ) {
-        $apiLoader = new class {
-            function __construct(...$adapters) {
-                $this->apiAdapters = $adapters;
-            }
-
-            function __call(string $methodName, $params)
-            {   
-                $result = null;
-
-                foreach ($this->apiAdapters as $adapter) {
-                    $result = $adapter->{$methodName}(...$params);
-                    return $result;
-                }
-            }
-        };
-        $this->api = new $apiLoader(
-            $this->theColorAdapter,
-            $this->colorPizzaAdapter,
-            $this->imagesApi,
+        $this->apiLoader->setApiAdapters(
+            $theColorAdapter,
+            $colorPizzaAdapter,
+            $imagesApi,
         );
     }
+
 
     function matchImageColor(Image $img, array $matchColors) {
 
@@ -53,8 +44,6 @@ class Images {
             $colorName = $this->getColorName($colorHex);
 
             foreach ($matchColors as $matchColor) {
-                var_dump($colorName . " / " . $matchColor);
-                var_dump("==================================");
                 if (stripos($colorName, $matchColor) !== false) {
                     return $matchColor;
                 }
@@ -64,7 +53,7 @@ class Images {
     }
 
     function getColorName($colorHex) {
-        return $this->api->getColorName($colorHex);
+        return $this->apiLoader->getColorName($colorHex);
     }
 
     function getMostUsedColors(Image $img, int $number = 1) {
