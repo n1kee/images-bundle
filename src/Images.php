@@ -6,7 +6,7 @@ use League\ColorExtractor\Color;
 use League\ColorExtractor\Palette;
 use ImagesBundle\Api\Adapter\TheColorAdapter;
 use ImagesBundle\Api\Adapter\ColorPizzaAdapter;
-use ImagesBundle\Api\ImagesApi;
+use ImagesBundle\Api\Adapter\NameThatColorAdapter;
 use ImagesBundle\Api\ApiLoader;
 use ourcodeworld\NameThatColor\ColorInterpreter;
 use App\Storage\RequestHeadersStorage;
@@ -18,7 +18,7 @@ class Images {
     function __construct(
         protected TheColorAdapter $theColorAdapter,
         protected ColorPizzaAdapter $colorPizzaAdapter,
-        protected ImagesApi $imagesApi,
+        protected NameThatColorAdapter $ntcAdapter,
         protected ApiLoader $apiLoader,
         protected RequestHeadersStorage $requestHeadersStorage,
         protected LoggerInterface $logger,
@@ -26,7 +26,7 @@ class Images {
         $this->apiLoader->setApiAdapters(
             $theColorAdapter,
             $colorPizzaAdapter,
-            $imagesApi,
+            $ntcAdapter,
         );
     }
 
@@ -62,7 +62,7 @@ class Images {
 
             $topColorsHex[ $colorHex ] = $count;
 
-            $colorName = $this->matchColorName($colorHex, $matchColors);
+            $colorName = $this->findColorName($colorHex, $matchColors);
 
             if ($colorName) {
                 if (empty($colorsFrequency[ $colorName ])) {
@@ -86,7 +86,8 @@ class Images {
         return null;
     }
 
-    function matchColorName(string $colorHex, array $matchColors) {
+    function findColorName(string $colorHex, array $matchColors) {
+        # TODO CHANGE TO API INTERATION UNTIL FIRST HIT
         $response = $this->apiLoader
             ->queryAll()
             ->getColorName($colorHex);
