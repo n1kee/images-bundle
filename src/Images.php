@@ -36,7 +36,8 @@ class Images {
     function matchImageColor(Image $img, array $matchColors) {
 
         $topColors = $this->getMostUsedColors($img, 10);
-        $matches = [];
+
+        $colorsFrequency = [];
 
         foreach($topColors as $color => $count) {
 
@@ -44,15 +45,29 @@ class Images {
 
             $colorName = $this->getColorName($colorHex);
 
+            $colorNameMatches = [];
+
             foreach ($matchColors as $matchColor) {
                 $matchPosition = stripos($colorName, $matchColor);
                 if ($matchPosition !== false) {
-                    $matches[ $matchPosition ] = $matchColor;
+                    $colorNameMatches[ $matchPosition ] = $matchColor;
                 }
             }
+
+            if (count($colorNameMatches)) {
+                ksort($colorNameMatches);
+                $colorNameFound = end($colorNameMatches);
+                if (empty($colorsFrequency[ $colorNameFound ])) {
+                    $colorsFrequency[ $colorNameFound ] = 0;
+                }
+                $colorsFrequency[ $colorNameFound ]++;
+            }
         }
-        ksort($matches);
-        return end($matches);
+        if (count($colorsFrequency)) {
+            arsort($colorsFrequency);
+            return array_key_last($colorsFrequency);  
+        }
+        return null;
     }
 
     function getColorName($colorHex) {
