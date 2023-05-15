@@ -7,6 +7,7 @@ use League\ColorExtractor\Palette;
 use ImagesBundle\Api\Adapter\TheColorAdapter;
 use ImagesBundle\Api\Adapter\ColorPizzaAdapter;
 use ImagesBundle\Api\Adapter\NameThatColorAdapter;
+use ImagesBundle\Api\Adapter\ColorNamesAdapter;
 use ImagesBundle\Api\ApiLoader;
 use ourcodeworld\NameThatColor\ColorInterpreter;
 use App\Storage\RequestHeadersStorage;
@@ -18,6 +19,7 @@ class Images {
     function __construct(
         protected TheColorAdapter $theColorAdapter,
         protected ColorPizzaAdapter $colorPizzaAdapter,
+        protected ColorNamesAdapter $colorNamesAdapter,
         protected NameThatColorAdapter $ntcAdapter,
         protected ApiLoader $apiLoader,
         protected RequestHeadersStorage $requestHeadersStorage,
@@ -26,6 +28,7 @@ class Images {
         $this->apiLoader->setApiAdapters(
             $theColorAdapter,
             $colorPizzaAdapter,
+            $colorNamesAdapter,
             $ntcAdapter,
         );
     }
@@ -104,6 +107,8 @@ class Images {
         $colorsFrequency = [];
         if ($response->success) {
             foreach ($response->result as $apiColorName) {
+                if (!$apiColorName) continue;
+
                 $colorName = $this->matchColorName(
                     $apiColorName, $matchColors
                 );

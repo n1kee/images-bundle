@@ -17,6 +17,6 @@ class ColorPizzaAdapter implements ImagesApiInterface {
 		if ($response->success) {
 			$colorName = $response->result["colors"][0]["name"];
 		}
-		return new ApiResponse($response->success, $colorName);
+		return new ApiResponse($colorName, $response->success);
 	}
 }
