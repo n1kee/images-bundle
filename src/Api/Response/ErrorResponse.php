@@ -1,9 +1,9 @@
 <?php
 
 namespace ImagesBundle\Api\Response;
-use ImagesBundle\Api\Interface\ResponseInterface;
+use ImagesBundle\Api\Abstract\Response;
 
-class ErrorResponse implements ResponseInterface {
+class ErrorResponse extends Response {
     public readonly bool $exactMatch;
     public readonly mixed $result;
     public readonly bool $success;

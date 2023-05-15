@@ -3,7 +3,7 @@
 namespace ImagesBundle\Api\Adapter;
 use ImagesBundle\Api\Interface\ImagesApiInterface;
 use ImagesBundle\Api\ColorPizzaApi;
-use ImagesBundle\Api\Interface\ResponseInterface;
+use ImagesBundle\Api\Abstract\Response;
 use ImagesBundle\Api\Response\SuccessResponse;
 
 class ColorPizzaAdapter implements ImagesApiInterface {
@@ -12,7 +12,7 @@ class ColorPizzaAdapter implements ImagesApiInterface {
 	) {
 	}
 
-	function getColorName($colorHex): ResponseInterface {
+	function getColorName($colorHex): Response {
 		$response = $this->colorPizzaApi->getColorInfo($colorHex);
 		$colorName = null;
 		if ($response->success) {

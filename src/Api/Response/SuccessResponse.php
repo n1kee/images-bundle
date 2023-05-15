@@ -1,10 +1,9 @@
 <?php
 
 namespace ImagesBundle\Api\Response;
-use ImagesBundle\Api\Interface\ResponseInterface;
+use ImagesBundle\Api\Abstract\Response;
 
-
-class SuccessResponse implements ResponseInterface {
+class SuccessResponse extends Response {
     public readonly bool $success;
     public readonly mixed $error;
     public readonly bool $empty;

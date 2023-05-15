@@ -4,8 +4,8 @@ namespace ImagesBundle\Api\Interface;
 
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use ImagesBundle\Api\Interface\ImagesApiInterface;
-use ImagesBundle\Api\Interface\ResponseInterface;
+use ImagesBundle\Api\Abstract\Response;
 
 interface ImagesApiInterface {
-	function getColorName(string $colorHex): ResponseInterface;
+	function getColorName(string $colorHex): Response;
 }

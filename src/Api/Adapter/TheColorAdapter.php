@@ -2,7 +2,7 @@
 
 namespace ImagesBundle\Api\Adapter;
 use ImagesBundle\Api\Interface\ImagesApiInterface;
-use ImagesBundle\Api\Interface\ResponseInterface;
+use ImagesBundle\Api\Abstract\Response;
 use ImagesBundle\Api\TheColorApi;
 use ImagesBundle\Api\Response\SuccessResponse;
 
@@ -12,7 +12,7 @@ class TheColorAdapter implements ImagesApiInterface {
 	) {
 	}
 
-	function getColorName($colorHex): ResponseInterface {
+	function getColorName($colorHex): Response {
 		$response = $this->theColorApi->getColorInfo($colorHex);
 		if ($response->success) {
 			$colorName = $response->result["name"]["value"];
