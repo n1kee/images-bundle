@@ -43,8 +43,10 @@ class Images {
         $colorNameMatches = [];
 
         foreach ($matchColors as $matchColor) {
-            $matchPosition = stripos($colorName, $matchColor);
-            if ($matchPosition !== false) {
+            preg_match("/(?<=^| ){$matchColor}(?=$| )/i", $colorName, $matches, PREG_OFFSET_CAPTURE);
+            if (count($matches)) {
+                $colorMatch = reset($matches);
+                $matchPosition = $colorMatch[ 1 ];
                 $colorNameMatches[ $matchPosition ] = $matchColor;
             }
         }
