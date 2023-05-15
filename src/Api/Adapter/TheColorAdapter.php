@@ -2,8 +2,9 @@
 
 namespace ImagesBundle\Api\Adapter;
 use ImagesBundle\Api\Interface\ImagesApiInterface;
+use ImagesBundle\Api\Interface\ResponseInterface;
 use ImagesBundle\Api\TheColorApi;
-use ImagesBundle\Api\ApiResponse;
+use ImagesBundle\Api\Response\SuccessResponse;
 
 class TheColorAdapter implements ImagesApiInterface {
 	function __construct(
@@ -11,11 +12,12 @@ class TheColorAdapter implements ImagesApiInterface {
 	) {
 	}
 
-	function getColorName($colorHex): ApiResponse {
+	function getColorName($colorHex): ResponseInterface {
 		$response = $this->theColorApi->getColorInfo($colorHex);
 		if ($response->success) {
 			$colorName = $response->result["name"]["value"];
+			return new SuccessResponse($colorName);
 		}
-		return new ApiResponse($colorName, $response->success);
+		return $response;
 	}
 }

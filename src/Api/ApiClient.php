@@ -4,7 +4,8 @@ namespace ImagesBundle\Api;
 
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use App\Storage\RequestHeadersStorage;
-use ImagesBundle\Api\ApiResponse;
+use ImagesBundle\Api\Response\ErrorResponse;
+use ImagesBundle\Api\Response\SuccessResponse;
 
 class ApiClient {
 
@@ -61,10 +62,10 @@ class ApiClient {
                     ->request($method, $fullUrl, $params);
 
             } catch (Exception $ex) {
-                return new ApiResponse(null, false, $ex);
+                return new ErrorResponse($ex);
             }
         } catch (Error $ex) {
-            return new ApiResponse(null, false, $ex);
+            return new ErrorResponse($ex);
         }
 
         $statusCode = $response->getStatusCode();
@@ -73,12 +74,12 @@ class ApiClient {
 
         if (floor($statusCode / 100) == 2) {
         	if ($contentType === "application/json") {
-        		return new ApiResponse($response->toArray());
+        		return new SuccessResponse($response->toArray());
         	}
             $parsedResponse = json_decode($response->getContent(), true);
-        	return new ApiResponse($parsedResponse);
+        	return new SuccessResponse($parsedResponse);
         }
 
-        return new ApiResponse(null, false);
+        return new ErrorResponse();
 	}
 }

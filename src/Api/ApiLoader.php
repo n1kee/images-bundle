@@ -2,7 +2,7 @@
 
 namespace ImagesBundle\Api;
 
-use ImagesBundle\Api\ApiResponse;
+use ImagesBundle\Api\Response\SuccessResponse;
 
 class ApiLoader {
 
@@ -27,20 +27,19 @@ class ApiLoader {
     {   
         if ($this->queryAllApis) {
             $result = [];
-            $responceSuccess = false;
 
             foreach ($this->apiAdapters as $adapter) {
                 $response = $adapter->{$methodName}(...$params);
                 $result[] = $response->result;
-                $responceSuccess = $responceSuccess || $response->success;
             }
 
-            return new ApiResponse($result, $responceSuccess);
+            return new SuccessResponse($result);
         } else {
             $response = null;
 
             foreach ($this->apiAdapters as $adapter) {
                 $response = $adapter->{$methodName}(...$params);
+                # TODO: REPLACE W EMPTY
                 if ($response->success) break;
             }
 

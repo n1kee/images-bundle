@@ -27,6 +27,9 @@ class Images {
         protected RequestHeadersStorage $requestHeadersStorage,
         protected LoggerInterface $logger,
     ) {
+        // NO API - 26 sec
+        // API - 2.54 min
+        // 
         $this->apiLoader->setApiAdapters(
             $imagickAdapter,
             $theColorAdapter,
@@ -58,7 +61,7 @@ class Images {
 
         $imgClone = $img->getClone();
 
-        $imgClone->setMaxHeight(10);
+        $imgClone->setMaxHeight(50);
 
         $topColors = $this->getMostUsedColors($imgClone, 10);
 

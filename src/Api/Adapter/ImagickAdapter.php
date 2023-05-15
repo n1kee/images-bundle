@@ -3,7 +3,7 @@
 namespace ImagesBundle\Api\Adapter;
 
 use ImagesBundle\Api\Interface\ImagesApiInterface;
-use ImagesBundle\Api\ApiResponse;
+use ImagesBundle\Api\Response\SuccessResponse;
 use \ImagickPixel;
 
 class ImagickAdapter implements ImagesApiInterface {
@@ -19,7 +19,7 @@ class ImagickAdapter implements ImagesApiInterface {
         "Orange" => "#FF8000",
     ];
 
-    function getColorName(string $colorHex): ApiResponse {
+    function getColorName(string $colorHex): SuccessResponse {
 
         foreach ($this->colors as $colorName => $colorValue) {
             $similarColorFound = (new ImagickPixel($colorValue))
@@ -27,10 +27,10 @@ class ImagickAdapter implements ImagesApiInterface {
                     new ImagickPixel($colorHex), 0.1
                 );
             if ($similarColorFound) {
-                return new ApiResponse($colorName);
+                return new SuccessResponse($colorName);
             }
         }
 
-        return new ApiResponse(null);
+        return new SuccessResponse(null);
     }
 }
