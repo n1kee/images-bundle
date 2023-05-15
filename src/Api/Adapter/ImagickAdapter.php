@@ -4,7 +4,7 @@ namespace ImagesBundle\Api\Adapter;
 
 use ImagesBundle\Api\Interface\ImagesApiInterface;
 use ImagesBundle\Api\Response\SuccessResponse;
-use \ImagickPixel;
+use ImagickPixel;
 
 class ImagickAdapter implements ImagesApiInterface {
     protected $colors = [
