@@ -39,8 +39,7 @@ class ApiLoader {
 
             foreach ($this->apiAdapters as $adapter) {
                 $response = $adapter->{$methodName}(...$params);
-                # TODO: REPLACE W EMPTY
-                if ($response->success) break;
+                if (!$response->empty) break;
             }
 
             return $response;
