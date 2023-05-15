@@ -52,9 +52,13 @@ class Images {
 
         $topColors = $this->getMostUsedColors($img, 10);
 
+        $topColorsSum = array_sum($topColors);
+
         $topColorsHex = [];
 
         $colorsFrequency = [];
+
+        $colorMap = [];
 
         foreach($topColors as $color => $count) {
 
@@ -69,6 +73,7 @@ class Images {
                     $colorsFrequency[ $colorName ] = 0;
                 }
                 $colorsFrequency[ $colorName ] += $count;
+                $colorMap[ $colorHex ] = $colorName;
             }
         }
 
@@ -76,31 +81,43 @@ class Images {
             "image" => $img->getImageSignature(),
             "topColors " => $topColorsHex,
             "matchedColors" => $colorsFrequency,
+            "matchedColorsMap" => $colorMap,
         ], JSON_UNESCAPED_SLASHES));
 
         if (count($colorsFrequency)) {
             arsort($colorsFrequency);
-            return array_key_first($colorsFrequency);  
+            $dominantColorName = array_key_first($colorsFrequency);
+            $dominantColorFrequncy = $colorsFrequency[ $dominantColorName ];
+            $dominantColorPercentage = $dominantColorFrequncy / $topColorsSum;
+            if ($dominantColorPercentage > .5) {
+                return $dominantColorName; 
+            }
         }
 
         return null;
     }
 
     function findColorName(string $colorHex, array $matchColors) {
-        # TODO CHANGE TO API INTERATION UNTIL FIRST HIT
         $response = $this->apiLoader
             ->queryAll()
             ->getColorName($colorHex);
-        $matchedColors = [];
+        $colorsFrequency = [];
         if ($response->success) {
             foreach ($response->result as $apiColorName) {
                 $colorName = $this->matchColorName(
                     $apiColorName, $matchColors
                 );
-                $matchedColors[] = $colorName;
+
+                if ($colorName) {
+                    if (empty($colorsFrequency[$colorName])) {
+                        $colorsFrequency[ $colorName ] = 0;
+                    }
+                    $colorsFrequency[ $colorName ]++;
+                }
             }
         }
-        return reset($matchedColors);
+        arsort($colorsFrequency);
+        return array_key_first($colorsFrequency);
     }
 
     function getMostUsedColors(Image $img, int $number = 1) {
