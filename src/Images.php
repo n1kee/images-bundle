@@ -8,6 +8,7 @@ use ImagesBundle\Api\Adapter\TheColorAdapter;
 use ImagesBundle\Api\Adapter\ColorPizzaAdapter;
 use ImagesBundle\Api\Adapter\NameThatColorAdapter;
 use ImagesBundle\Api\Adapter\ColorNamesAdapter;
+use ImagesBundle\Api\Adapter\ImagickAdapter;
 use ImagesBundle\Api\ApiLoader;
 use ourcodeworld\NameThatColor\ColorInterpreter;
 use App\Storage\RequestHeadersStorage;
@@ -21,11 +22,13 @@ class Images {
         protected ColorPizzaAdapter $colorPizzaAdapter,
         protected ColorNamesAdapter $colorNamesAdapter,
         protected NameThatColorAdapter $ntcAdapter,
+        protected ImagickAdapter $imagickAdapter,
         protected ApiLoader $apiLoader,
         protected RequestHeadersStorage $requestHeadersStorage,
         protected LoggerInterface $logger,
     ) {
         $this->apiLoader->setApiAdapters(
+            $imagickAdapter,
             $theColorAdapter,
             $colorPizzaAdapter,
             $colorNamesAdapter,
@@ -53,7 +56,11 @@ class Images {
 
     function matchImageColor(Image $img, array $matchColors) {
 
-        $topColors = $this->getMostUsedColors($img, 10);
+        $imgClone = $img->getClone();
+
+        $imgClone->setMaxHeight(10);
+
+        $topColors = $this->getMostUsedColors($imgClone, 10);
 
         $topColorsSum = array_sum($topColors);
 
