@@ -7,6 +7,7 @@ use ImagesBundle\Api\Abstract\Response;
 use ImagesBundle\Api\Interface\ImagesApiInterface;
 use ImagesBundle\Api\Adapter\ImagickAdapter;
 use FilesBundle\File;
+use ImagesBundle\Api\Response\SuccessResponse;
 
 class ImagesLocalDbAbstract implements ImagesApiInterface {
 

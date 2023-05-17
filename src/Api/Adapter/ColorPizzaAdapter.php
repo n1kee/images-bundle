@@ -1,24 +1,20 @@
 <?php
 
 namespace ImagesBundle\Api\Adapter;
-use ImagesBundle\Api\Interface\ImagesApiInterface;
 use ImagesBundle\Api\ColorPizzaApi;
+use ImagesBundle\Api\Abstract\ImagesLocalDbAbstract;
 use ImagesBundle\Api\Abstract\Response;
 use ImagesBundle\Api\Response\SuccessResponse;
 
-class ColorPizzaAdapter implements ImagesApiInterface {
-	function __construct(
-		protected ColorPizzaApi $colorPizzaApi
-	) {
-	}
+class ColorPizzaAdapter extends ImagesLocalDbAbstract {
 
-	function getColorName($colorHex): Response {
-		$response = $this->colorPizzaApi->getColorInfo($colorHex);
-		$colorName = null;
-		if ($response->success) {
-			$colorName = $response->result["colors"][0]["name"];
-			return new SuccessResponse($colorName);
-		}
-		return $response;
-	}
+	protected string $dbPath = __DIR__ . "/../data/colorpizza.csv";
+
+   	protected function dbParseLine(string $line): array {
+        $lineArray = explode(",", $line);
+        return [
+            "name" => $lineArray[0],
+            "hex" => substr($lineArray[1], 1),
+        ];
+    }
 }
