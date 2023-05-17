@@ -31,11 +31,11 @@ class Images {
         // API - 2.54 min
         // 
         $this->apiLoader->setApiAdapters(
-            $imagickAdapter,
-            $theColorAdapter,
-            $colorPizzaAdapter,
+            // $imagickAdapter,
+            // $theColorAdapter,
+            // $colorPizzaAdapter,
             $colorNamesAdapter,
-            $ntcAdapter,
+            // $ntcAdapter,
         );
     }
 
