@@ -32,9 +32,9 @@ class Images {
         // 
         $this->apiLoader->setApiAdapters(
             // $imagickAdapter,
-            // $theColorAdapter,
+            $theColorAdapter,
             // $colorPizzaAdapter,
-            $colorNamesAdapter,
+            // $colorNamesAdapter,
             // $ntcAdapter,
         );
     }
