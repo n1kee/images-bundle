@@ -8,7 +8,7 @@ use ImagesBundle\Api\Abstract\Response;
  */
 class ErrorResponse extends Response {
     /**
-     * Shows if an exact match found.
+     * Shows if an exact match was found.
      */
     public readonly bool $exactMatch;
 

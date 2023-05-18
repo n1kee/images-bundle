@@ -21,7 +21,7 @@ class SuccessResponse extends Response {
     /**
      * Error object.
      */
-    public readonly mixed $error = null;
+    public readonly mixed $error;
 
     function __construct(
         /**
@@ -29,7 +29,7 @@ class SuccessResponse extends Response {
          */
         public readonly mixed $result,
         /**
-         * Shows if an exact match found.
+         * Shows if an exact match was found.
          */
         public readonly bool $exactMatch = true,
     ) {

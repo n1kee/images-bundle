@@ -8,7 +8,7 @@ namespace ImagesBundle\Api\Abstract;
  */
 abstract class Response {
     /**
-     * Shows if an exact match found.
+     * Shows if an exact match was found.
      */
     public readonly bool $exactMatch;
 
