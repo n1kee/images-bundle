@@ -17,7 +17,7 @@ use FilesBundle\Image;
 /**
  * A service class for working with images.
  */
-class Images {
+class ImagesService {
 
     function __construct(
         protected TheColorAdapter $theColorAdapter,
