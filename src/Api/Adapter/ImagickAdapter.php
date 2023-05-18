@@ -7,7 +7,14 @@ use ImagesBundle\Api\Response\SuccessResponse;
 use ImagickPixel;
 use ImagickPixelException;
 
+/**
+ * An adapter class for working with Imagick API.
+ * 
+ */
 class ImagickAdapter implements ImagesApiInterface {
+    /**
+     * Color names.
+     */
     protected $colors = [
         "Blue" => "#0000FF",
         "Red" => "#FF0000",
@@ -20,13 +27,26 @@ class ImagickAdapter implements ImagesApiInterface {
         "Orange" => "#FF8000",
     ];
 
-    function parseColorHex(string $colorHex): string {
+    /**
+     * Normalizes the HEX value the color. 
+     * 
+     * @param string $colorHex HEX value of the color.
+     * @return string Normalized HEX value.
+     */
+    function normalizeColorHex(string $colorHex): string {
         return preg_replace("/^(?!#)/", "#", $colorHex);
     }
 
+    /**
+     * Checks if colors are similar.
+     * 
+     * @param string $color1
+     * @param string $color2
+     * @return bool Returns true if colors are similar.
+     */
     function isSimilarColor(string $color1, string $color2): bool {
-        $color1 = $this->parseColorHex($color1);
-        $color2 = $this->parseColorHex($color2);
+        $color1 = $this->normalizeColorHex($color1);
+        $color2 = $this->normalizeColorHex($color2);
 
         try {
             $colorPixel1 = new ImagickPixel($color1);
@@ -37,6 +57,12 @@ class ImagickAdapter implements ImagesApiInterface {
         return $colorPixel1->isPixelSimilar($colorPixel2, 0.1);
     }
 
+    /**
+     * Get's the name of the color.
+     * 
+     * @param string $colorHex HEX value of the color.
+     * @return SuccessResponse Name of the color.
+     */
     function getColorName(string $colorHex): SuccessResponse {
 
         foreach ($this->colors as $colorName => $colorValue) {

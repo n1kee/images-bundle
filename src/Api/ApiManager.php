@@ -4,7 +4,13 @@ namespace ImagesBundle\Api;
 
 use ImagesBundle\Api\Response\SuccessResponse;
 
-class ApiLoader {
+/**
+ * A class for managing API adapters.
+ * 
+ * @param Foo $param
+ * @return Bar
+ */
+class ApiManager {
 
     function __construct(
         protected array $apiAdapters = [],
@@ -12,17 +18,36 @@ class ApiLoader {
     ) {
     }
 
-    function queryAll(...$adapters) {
-        $newApiLoader = new ApiLoader(
+    /**
+     * Returns an API manager for querying all API's.
+     * 
+     * @param ImagesApiInterface $adapters,... API adapters to be used.
+     * @return ApiManager
+     */
+    function queryAll(...$adapters): ApiManager {
+        $newApiManager = new ApiManager(
             $this->apiAdapters, true
         );
-        return $newApiLoader;
+        return $newApiManager;
     }
 
+    /**
+     * Set's API adapters for the manager.
+     * 
+     * @param ImagesApiInterface $adapters,... API adapters to be set.
+     */
     function setApiAdapters(...$adapters) {
         $this->apiAdapters = $adapters;
     }
 
+    /**
+     * Calls a method of API adapters.
+     * 
+     * Can call all API's or one by one until a first result.
+     * 
+     * @param string $methodName Name of the method
+     * @param $params,... Parameters of the method.
+     */
     function __call(string $methodName, $params)
     {   
         if ($this->queryAllApis) {

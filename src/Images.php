@@ -9,12 +9,14 @@ use ImagesBundle\Api\Adapter\ColorPizzaAdapter;
 use ImagesBundle\Api\Adapter\NameThatColorAdapter;
 use ImagesBundle\Api\Adapter\ColorNamesAdapter;
 use ImagesBundle\Api\Adapter\ImagickAdapter;
-use ImagesBundle\Api\ApiLoader;
-use ourcodeworld\NameThatColor\ColorInterpreter;
+use ImagesBundle\Api\ApiManager;
 use App\Storage\RequestHeadersStorage;
 use Psr\Log\LoggerInterface;
 use FilesBundle\Image;
 
+/**
+ * A service class for working with images.
+ */
 class Images {
 
     function __construct(
@@ -23,14 +25,14 @@ class Images {
         protected ColorNamesAdapter $colorNamesAdapter,
         protected NameThatColorAdapter $ntcAdapter,
         protected ImagickAdapter $imagickAdapter,
-        protected ApiLoader $apiLoader,
+        protected ApiManager $apiManager,
         protected RequestHeadersStorage $requestHeadersStorage,
         protected LoggerInterface $logger,
     ) {
-        // NO API - 26 sec
-        // API - 2.54 min
-        // 
-        $this->apiLoader->setApiAdapters(
+        /**
+         * Set API adapters for the API manager.
+         */
+        $this->apiManager->setApiAdapters(
             $imagickAdapter,
             $theColorAdapter,
             $colorPizzaAdapter,
@@ -39,6 +41,13 @@ class Images {
         );
     }
 
+    /**
+     * Match a color name to the list of names.
+     * 
+     * @param string $colorName
+     * @param array $matchColors List of color names.
+     * @return string Returns the matched color name.
+     */
     function matchColorName(string $colorName, array $matchColors) {
         $colorNameMatches = [];
 
@@ -59,6 +68,13 @@ class Images {
         return null;
     }
 
+    /**
+     * Match a dominant color of the image to the list of color names.
+     * 
+     * @param Image $img
+     * @param array $matchColors List of color names.
+     * @return string Name of the dominant image color.
+     */
     function matchImageColor(Image $img, array $matchColors) {
 
         $imgClone = $img->getClone();
@@ -112,8 +128,15 @@ class Images {
         return null;
     }
 
+    /**
+     * Finds a color name from the list of colors.
+     * 
+     * @param string $colorHex HEX value of the color.
+     * @param array $matchColors List of color names for matching.
+     * @return string Color name.
+     */
     function findColorName(string $colorHex, array $matchColors) {
-        $response = $this->apiLoader
+        $response = $this->apiManager
             ->queryAll()
             ->getColorName($colorHex);
         $colorsFrequency = [];
@@ -137,8 +160,14 @@ class Images {
         return array_key_first($colorsFrequency);
     }
 
+    /**
+     * Get's most used colors on the image.
+     * 
+     * @param Image $img
+     * @param int $number How many most used colors to get.
+     * @return array List of the most used colors on the image.
+     */
     function getMostUsedColors(Image $img, int $number = 1) {
-
         # Needs ext-gd extension
         $palette = Palette::fromContents($img->__toString());
 

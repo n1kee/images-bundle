@@ -2,10 +2,33 @@
 
 namespace ImagesBundle\Api\Abstract;
 
+/**
+ * Class for representing responses from API's
+ * 
+ */
 abstract class Response {
-    public readonly bool $success;
-    public readonly mixed $result;
+    /**
+     * Shows if an exact match found.
+     */
     public readonly bool $exactMatch;
-    public readonly mixed $error;
+
+    /**
+     * Request result.
+     */
+    public readonly mixed $result;
+
+    /**
+     * Shows if request was successful.
+     */
+    public readonly bool $success;
+
+    /**
+     * Shows if request result was empty.
+     */
     public readonly bool $empty;
+
+    /**
+     * Error object.
+     */
+    public readonly mixed $error;
 }
