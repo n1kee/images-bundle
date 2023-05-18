@@ -161,11 +161,11 @@ class ImagesService {
     }
 
     /**
-     * Get's most used colors on the image.
+     * Get's most used colors of the image.
      * 
      * @param Image $img
      * @param int $number How many most used colors to get.
-     * @return array List of the most used colors on the image.
+     * @return array List of the most used colors of the image.
      */
     function getMostUsedColors(Image $img, int $number = 1) {
         # Needs ext-gd extension
