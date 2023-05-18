@@ -161,7 +161,7 @@ class ImagesService {
     }
 
     /**
-     * Get's most used colors of the image.
+     * Get's the most used colors of the image.
      * 
      * @param Image $img
      * @param int $number How many most used colors to get.
