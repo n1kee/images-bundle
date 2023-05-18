@@ -1,9 +1,9 @@
 {
-    "name": "files",
+    "name": "n1kee/images-bundle",
     "type": "symfony-bundle",
     "autoload": {
         "psr-4": {
-            "Files\\": "src/"
+            "ImagesBundle\\": "src/"
         }
     },
     "require": {}
