@@ -6,5 +6,7 @@
             "ImagesBundle\\": "src/"
         }
     },
-    "require": {}
+    "require": {
+        "symfony/framework-bundle": "5.4.*"
+    }
 }
